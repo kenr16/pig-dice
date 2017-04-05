@@ -14,19 +14,33 @@ Player.prototype.checkOne = function (dieRoll) {
   if(dieRoll == 1) {
     this.pot = 0;
     return true;
+  } else {
+    return false;
   }
 }
 
 Player.prototype.victory = function () {
   if (this.total >= 100) {
-    alert("Victory for " + this.name + "!");
+    return true;
+  } else {
+    return false;
   }
+
 }
+
+Player.prototype.roll = function (dieRoll) {
+  this.pot += dieRoll;
+}
+
+Player.prototype.hold = function () {
+  this.addScore(this.pot);
+}
+
+
 
 function getRandomArbitrary() {
   return Math.floor(Math.random() * (7 - 1)) + 1;
 }
-
 
 
 
@@ -47,15 +61,16 @@ $(function(){
   var Player1 = new Player(player1Name, 0, 0);
   var Player2 = new Player(player2Name, 0, 0);
 
-  //handles changing name
+  //handles changing names
   $("#name-container1 input").change(function(){
     player1Name = $("#name1").val();
+    Player1.name = player1Name;
     $("#player1 h1").text(player1Name);
   });
 
-  //handles changing name
   $("#name-container2 input").change(function(){
     player2Name = $("#name2").val();
+    Player2.name = player2Name;
     $("#player2 h1").text(player2Name);
   });
 
@@ -66,24 +81,79 @@ $(function(){
       $("#roll1").text(dieRoll);
       $(".btn").toggleClass("hidden");
       $(".col-xs-5").toggleClass("selected");
+      aiScript();             //Disable for single player.
     } else {
       $("#roll1").text(dieRoll);
-      Player1.pot += dieRoll;
+      Player1.roll(dieRoll);
       $("#pot1").text(Player1.pot);
     }
   });
 
   $("button[name=hold1]").click(function(){ //Player 1 Hold Function
-    Player1.addScore(Player1.pot);
+    Player1.hold();
     $("#totalscore1").text(Player1.total);
+    resetFields();
+    if (Player1.victory() === true) {
+      var delayMillis = 200; //1 second
+      setTimeout(function() {
+        alert("Victory for " + Player1.name + "!");
+      }, delayMillis);
+    } else {
+      $(".btn").toggleClass("hidden");
+      $(".col-xs-5").toggleClass("selected");
+      aiScript();
+    }
+  });
+
+
+// ************************************************
+// Dumb AI Script
+// ************************************************
+  var aiScript = function() {
+    alert("Player 2's turn");
+    var dieRolls = [];
+      for (var i = 0; i < 2; i ++) {
+        var dieRoll = parseInt(getRandomArbitrary());
+        if (Player2.checkOne(dieRoll) === true) {
+          $("#pot2").text(0);
+          $("#roll2").text(dieRoll);
+          $(".btn").toggleClass("hidden");
+          $(".col-xs-5").toggleClass("selected");
+          alert("The AI has rolled a 1");
+          dieRolls.push(dieRoll);
+          return;
+        } else {
+          $("#roll2").text(dieRoll);
+          Player2.roll(dieRoll);
+          $("#pot2").text(Player2.pot);
+        }
+        dieRolls.push(dieRoll);
+        if (i == 2) {
+          alert("The AI has finished with the following rolls: " + dieRolls);
+        }
+      }
+    Player2.hold();
+    $("#totalscore2").text(Player2.total);
     resetFields();
     $(".btn").toggleClass("hidden");
     $(".col-xs-5").toggleClass("selected");
-    var delayMillis = 200; //1 second
-    setTimeout(function() {
-      Player1.victory();
-    }, delayMillis);
-  });
+
+    if (Player2.victory() === true) {
+      var delayMillis = 200; //1 second
+      setTimeout(function() {
+        alert("Victory for " + Player2.name + "!");
+      }, delayMillis);
+      $(".btn").toggleClass("hidden");
+      $(".col-xs-5").toggleClass("selected");
+    }
+
+  }
+});
+
+// ************************************************
+// End Dumb AI Script
+// ************************************************
+
 
 // ************************************************
 // Player 2 Human Script
@@ -97,13 +167,13 @@ $(function(){
   //     $(".col-xs-5").toggleClass("selected");
   //   } else {
   //     $("#roll2").text(dieRoll);
-  //     Player2.pot += dieRoll;
+  //     Player2.roll(dieRoll);
   //     $("#pot2").text(Player2.pot);
   //   }
   // });
   //
   // $("button[name=hold2]").click(function(){  //Player 2 Hold Function
-  //   Player2.addScore(Player2.pot);
+  //   Player2.hold();
   //   $("#totalscore2").text(Player2.total);
   //   Player2.victory();
   //   resetFields();
@@ -117,60 +187,3 @@ $(function(){
 // ************************************************
 // End Player 2 Human Script
 // ************************************************
-
-//AI Script
-  $()//Something Will Happen
-    for (var i = 0; i < 2; i ++) { //i is the number of rolls the AI will run through.
-      var dieRoll = parseInt(getRandomArbitrary());
-      $("#roll2").text(dieRoll);
-      Player2.pot += dieRoll;
-      $("#pot2").text(Player2.pot);
-      var delayMillis = 1000; //1 second delay script
-      setTimeout(function() {
-        alert("First AI Roll!");
-      }, delayMillis);
-      delayMillis = 1000;
-
-
-
-
-
-
-
-    }
-
-
-  //
-  //   if (Player2.checkOne(dieRoll) === true) {
-  //     $("#pot2").text(0);
-  //
-  //     $(".btn").toggleClass("hidden");
-  //     $(".col-xs-5").toggleClass("selected");
-  //   } else {
-  //     $("#roll2").text(dieRoll);
-  //     Player2.pot += dieRoll;
-  //     $("#pot2").text(Player2.pot);
-  //   }
-  //
-  //
-  //   Player2.addScore(Player2.pot);
-  //   $("#totalscore2").text(Player2.total);
-  //   Player2.victory();
-  //   resetFields();
-  //   $(".btn").toggleClass("hidden");
-  //   $(".col-xs-5").toggleClass("selected");
-  //   var delayMillis = 200; //1 second
-  //   setTimeout(function() {
-  //     Player2.victory();
-  //   }, delayMillis);
-  // });
-
-
-});
-
-//
-//   $("#accountForm").submit(function(e){
-//     e.preventDefault();
-//
-//   });
-//
