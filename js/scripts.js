@@ -130,7 +130,11 @@ $(function(){
     var aiScript = function() {
       alert(Player2.name + "'s turn!");
       var dieRolls = [];
-      while (Player2.pot < 20 || (Player1.total + 10) >= (Player2.total + Player2.pot)) {
+
+      while (Player2.pot < 20 || Player2.pot <= 25 && (Player1.total + 10) >= (Player2.total + Player2.pot)) {
+        if ((Player2.pot+Player2.total) >= 100) {
+          break;
+        }
         var dieRoll = parseInt(getRandomArbitrary());
         alert(Player2.name + " has rolled a "+ dieRoll + "\nCurrent Pot: " + Player2.pot);
 
