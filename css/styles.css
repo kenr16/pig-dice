@@ -2,6 +2,10 @@
   display: none;
 }*/
 
+img {
+  width: 200px;
+}
+
 .hidden {
   display: none;
 }
@@ -10,7 +14,7 @@
   border-style: solid;
   border-width: 5px;
   border-radius: 30px;
-  border-color: #ffffff;
+  border-color: #000000;
   margin: 20px;
   padding: 20px;
   height: 500px;
@@ -18,7 +22,17 @@
 }
 
 .selected {
-  border-color: #000000;
+  /*border-color: #000000;*/
+}
+
+.winner {
+  border-color: gold;
+  border-width: 8px;
+}
+
+.jumbotron {
+  text-align: center;
+  background-color: #ccff33;
 }
 
 

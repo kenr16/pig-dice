@@ -117,6 +117,8 @@ $(function(){
       var delayMillis = 200; //1 second
       setTimeout(function() {
         alert("Victory for " + Player1.name + "!");
+        $("#player1").addClass("winner");
+        $("#player1 img").removeClass("hidden");
       }, delayMillis);
     } else {
       $(".btn").toggleClass("hidden");
@@ -131,7 +133,7 @@ $(function(){
       alert(Player2.name + "'s turn!");
       var dieRolls = [];
 
-      while (Player2.pot < 20 || Player2.pot <= 25 && (Player1.total + 10) >= (Player2.total + Player2.pot)) {
+      while (Player2.pot < 20 || Player2.pot <= 24 && (Player1.total + 10) >= (Player2.total + Player2.pot)) {
         if ((Player2.pot+Player2.total) >= 100) {
           break;
         }
@@ -143,7 +145,7 @@ $(function(){
           $("#roll2").text(dieRoll);
           $(".btn").toggleClass("hidden");
           $(".col-xs-5").toggleClass("selected");
-          alert("The AI has rolled a 1");
+          alert(Player2.name + " has rolled a 1");
           dieRolls.push(dieRoll);
           return;
         } else {
@@ -153,7 +155,7 @@ $(function(){
         }
         dieRolls.push(dieRoll);
       }
-      alert("The AI has finished with the following rolls: " + dieRolls);
+      alert(Player2.name + " has finished with the following rolls: " + dieRolls);
 
       Player2.hold();
       $("#totalscore2").text(Player2.total);
@@ -165,6 +167,8 @@ $(function(){
         var delayMillis = 200; //1 second
         setTimeout(function() {
           alert("Victory for " + Player2.name + "!");
+          $("#player2").addClass("winner");
+          $("#player2 img").removeClass("hidden");
         }, delayMillis);
         $(".btn").toggleClass("hidden");
         $(".col-xs-5").toggleClass("selected");
